@@ -17,9 +17,8 @@ async function listarTalleres(req, res) {
 async function registrarAlumno(req, res) {
     try {
         const { idTaller, idAlumno } = req.body;
-        const resultado = await tuModelo.registrarAlumno(idTaller, idAlumno);
-        
-        res.json({ registrado: resultado });
+        const alumnoRegistrado = await tuModelo.registrarAlumno(idTaller, idAlumno);
+        res.json({ registrado: alumnoRegistrado });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

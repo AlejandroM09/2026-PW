@@ -13,3 +13,5 @@ async function consultarAsistenciaPorTaller(idTaller) {
     const [filas]= await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM asistencia WHERE taller_id = ?`, [idTaller]);
     return filas;
 }
+
+module.exports = {registrarAsistencia, consultarAsistenciaPorTaller};

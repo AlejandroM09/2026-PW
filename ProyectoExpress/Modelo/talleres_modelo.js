@@ -13,3 +13,5 @@ async function registrarAlumno(idTaller, idAlumno) {
     );
     return info.affectedRows > 0;
 }
+
+module.exports = {ObtenerPorNombre, registrarAlumno};

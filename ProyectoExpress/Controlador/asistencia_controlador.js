@@ -1,4 +1,3 @@
-const bcrypt = require('brypt.js')
 const asistenciaModel = require('../Modelo/asistencia_modelo');
 
 function esDuplicado(error){
@@ -7,9 +6,12 @@ function esDuplicado(error){
 
 async function registrarAsistencia(req, res) {
     try{
-        const{ idTaller, nombreAlumno, boleta}=req.body;
-        const asistenciaRegistrada = await asistenciaModel.registrarAsistencia(idTaller, nombreAlumno, boleta);
-        res.json({registrado: asistenciaRegistrada});
+        const{ taller_id, nombre_alumno, boleta, fecha_registro}=req.body;
+        if (!taller_id || !nombre_alumno || !boleta) {
+        return res.status(400).json({ error: 'taller_id, nombre_alumno y boleta son obligatorios' });
+        }
+        const asistencia = await asistenciaModel.registrarAsistencia(taller_id, nombre_alumno, boleta,fecha_registro);
+        res.status(201).json(asistencia);
     }catch(error){
         res.status(500).json({error:error.message});
     }
@@ -18,8 +20,8 @@ async function registrarAsistencia(req, res) {
 
 async function consultarAsistenciaPorTaller(req,res) {
     try{
-        const{idTaller}=req.params;
-        const asistencias = await asistenciaModelo.consultarAsistenciaPorTaller(idTaller);
+        const{id}=req.params;
+        const asistencias = await asistenciaModel.consultarAsistenciaPorTaller(id);
         res.json(asistencias);
     }catch (error){
         res.status(500).json({error:error.message})
@@ -27,4 +29,4 @@ async function consultarAsistenciaPorTaller(req,res) {
     
 }
 
-
+module.exports = { registrarAsistencia, consultarAsistenciaPorTaller };

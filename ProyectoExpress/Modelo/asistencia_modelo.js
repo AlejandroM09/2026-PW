@@ -1,16 +1,19 @@
 const pool = require('../bd-local');
 
-const COLUMNAS_PUBLICAS = 'id, taller_id, nombre_alumno, boleta';
+const COLUMNAS_PUBLICAS = 'id, taller_id, nombre_alumno, boleta, fecha_registro';
 
-async function registrarAsistencia(idTaller, nombreAlumno, boleta) {
+async function registrarAsistencia(idTaller, nombreAlumno, boleta, fechaRegistro) {
     const [info]= await pool.query(
-        `INSERT INTO asistencia (taller_id, nombre_alumno, boleta) VALUES (?, ?, ?)`, [idTaller, nombreAlumno, boleta]
+        `INSERT INTO asistencias (taller_id, nombre_alumno, boleta) VALUES (?, ?, ?)`, [idTaller, nombreAlumno, boleta]
     );
-    return info.affectedRows > 0;
+    const [filas] = await pool.query(
+        `SELECT ${COLUMNAS_PUBLICAS} FROM asistencias WHERE id = ?`, [info.insertId]
+    );
+    return filas[0];
 }
 
 async function consultarAsistenciaPorTaller(idTaller) {
-    const [filas]= await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM asistencia WHERE taller_id = ?`, [idTaller]);
+    const [filas]= await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM asistencias WHERE taller_id = ?`, [idTaller]);
     return filas;
 }
 

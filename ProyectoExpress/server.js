@@ -6,6 +6,10 @@ app.use(express.json());
 
 const PORT= 4000;
 
+app.get('/', (req, res) => {
+    res.json({ mensaje: 'API de Registro de Asistencia - CECyT 9 funcionando correctamente' });
+});
+
 //ejemplo de una petición por medio de una ruta principal GET
 app.get('/saludo',(req,res)=>{
     res.json({mensaje:'Hola esto es una prueba en GET'})

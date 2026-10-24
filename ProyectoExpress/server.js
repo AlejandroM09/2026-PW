@@ -1,6 +1,8 @@
 const express = require('express');
 const tallerControlador = require('./Controlador/taller_controlador');
 const asistenciaControlador = require('./Controlador/asistencia_controlador');
+const usuarioControlador = require('./Controlador/usuario_controlador');
+
 
 const app = express();
 
@@ -30,6 +32,11 @@ app.get('/api/talleres/:id', tallerControlador.obtenerTaller);
 app.post('/api/talleres', tallerControlador.crearTaller);
 app.post('/api/asistencias', asistenciaControlador.registrarAsistencia);
 app.get('/api/talleres/:id/asistencias', asistenciaControlador.consultarAsistenciaPorTaller);
+app.get('/api/usuarios', usuarioControlador.listarUsuarios);
+app.get('/api/usuarios/:id', usuarioControlador.obtenerUsuario);
+
+
+
 app.listen(PORT,()=>{
     console.log(`Servidor escuchando en el puerto: ${PORT}`);
 })

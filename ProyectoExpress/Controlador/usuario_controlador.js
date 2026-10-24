@@ -45,6 +45,28 @@ async function crearUsuario(req, res) {
     }
 }
 
+async function actualizarUsuario(req, res) {
+    try {
+        const { nombre, correo, rol } = req.body || {};
+
+        if (nombre === undefined && correo === undefined && rol === undefined) {
+            return res.status(400).json({ error: 'Envía al menos uno de: nombre, correo, rol' });
+        }
+        if (correo !== undefined && !validarCorreo(correo)) {
+            return res.status(400).json({ error: 'El correo no tiene un formato válido' });
+        }
+
+        const usuario = await usuarioModel.actualizar(req.params.id, { nombre, correo, rol });
+        if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+        res.json(usuario);
+    } catch (error) {
+        if (esDuplicado(error)) {
+            return res.status(409).json({ error: 'Ya existe un usuario con ese correo' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+}
+
 async function obtenerUsuario(req, res) {
     try{
         const usuario = await usuarioModel.obtenerPorId(req.params.id);
@@ -55,4 +77,15 @@ async function obtenerUsuario(req, res) {
     }
     
 }
-module.exports = {listarUsuarios, obtenerUsuario,crearUsuario};
+
+async function eliminarUsuario(req, res) {
+    try {
+        const eliminado = await usuarioModel.eliminar(req.params.id);
+        if (!eliminado) return res.status(404).json({ error: 'Usuario no encontrado' });
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+module.exports = { listarUsuarios, obtenerUsuario, crearUsuario, actualizarUsuario, eliminarUsuario };

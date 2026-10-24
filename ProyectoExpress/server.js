@@ -35,7 +35,8 @@ app.get('/api/talleres/:id/asistencias', asistenciaControlador.consultarAsistenc
 app.get('/api/usuarios', usuarioControlador.listarUsuarios);
 app.get('/api/usuarios/:id', usuarioControlador.obtenerUsuario);
 app.post('/api/usuarios', usuarioControlador.crearUsuario);
-
+app.put('/api/usuarios/:id', usuarioControlador.actualizarUsuario);
+app.delete('/api/usuarios/:id', usuarioControlador.eliminarUsuario);
 
 app.listen(PORT,()=>{
     console.log(`Servidor escuchando en el puerto: ${PORT}`);

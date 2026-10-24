@@ -11,12 +11,12 @@ return filas;
 
 //obtener por id
 async function obtenerPorId(id) {
-    const [filas]= await pool.query(`SELCT ${COLUMNAS_PUBLICAS} FROM uusarios WHERE id = ?`);
+    const [filas]= await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuarios WHERE id = ?`, [id]);
     return filas[0];
 }
 
 //REGISTRAR
-async function crear({nombre,correo,contraseñaHash,boleta,rol}) {
+async function crear({nombre,correo,contrasenaHash,boleta,rol}) {
     const [info]= await pool.query(
         `INSERT INTO usuarios (nombre, correo, contrasena_hash, 
         boleta, rol) VALUES (?, ?, ?, ?, ?)`, [nombre, correo, contrasenaHash, boleta, rol || 'alumno']

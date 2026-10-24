@@ -1,21 +1,20 @@
 //vamos a dejarles de las 3 funciones para validar
 
-function ValidarCorreo(){
+function validarCorreo(correo){
     if(typeof correo !== 'string') return false;
 
-    const correoV = /@/;
+    const correoV = /^[^\s@]+@[^\s@]+$/;
 
-    return correoV,test(correo);
+    return correoV.test(correo);
 }
 
-function validarBoleta(){
-    if(typeof boleta !== 'number' || Number.isNaN(boleta)) return false;
-    return String(boleta).length === 10;
+function validarBoleta(boleta){
+    return /^\d{10}$/.test(String(boleta));
 }
 
-function validarContraseña(){
+function validarContraseña(contrasena){
     if (typeof contrasena !== 'string')return false;
-    return constrasena.lenght >=8;
+    return contrasena.length >=8;
 }
 
-module.exports={validarBoleta,validarBoleta,validarContraseña}
+module.exports={validarCorreo,validarBoleta,validarContraseña}

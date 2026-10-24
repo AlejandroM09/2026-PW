@@ -34,7 +34,7 @@ app.post('/api/asistencias', asistenciaControlador.registrarAsistencia);
 app.get('/api/talleres/:id/asistencias', asistenciaControlador.consultarAsistenciaPorTaller);
 app.get('/api/usuarios', usuarioControlador.listarUsuarios);
 app.get('/api/usuarios/:id', usuarioControlador.obtenerUsuario);
-
+app.post('/api/usuarios', usuarioControlador.crearUsuario);
 
 
 app.listen(PORT,()=>{

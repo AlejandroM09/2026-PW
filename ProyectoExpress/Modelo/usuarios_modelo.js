@@ -5,28 +5,28 @@ const COLUMNAS_PUBLICAS = 'id, nombre, correo, boleta, rol';
 
 //consultar a todos
 async function listar() {
-    const [filas]= await pool.query(`SELCT ${COLUMNAS_PUBLICAS} FROM uusarios ORDER BY id`);
-    return filas;
+const [filas]= await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuarios ORDER BY id`);    
+return filas;
 }
 
 //obtener por id
-async function obtenerPorId() {
+async function obtenerPorId(id) {
     const [filas]= await pool.query(`SELCT ${COLUMNAS_PUBLICAS} FROM uusarios WHERE id = ?`);
     return filas[0];
 }
 
 //REGISTRAR
-async function crear({nombre,correo,contraseña,boleta,rol}) {
+async function crear({nombre,correo,contraseñaHash,boleta,rol}) {
     const [info]= await pool.query(
-        `INSERT INTO usuarios (nombre, correo, contraseña_hash, 
+        `INSERT INTO usuarios (nombre, correo, contrasena_hash, 
         boleta, rol) VALUES (?, ?, ?, ?, ?)`, [nombre, correo, contrasenaHash, boleta, rol || 'alumno']
     );
     return obtenerPorId(info.insertId);
 }
 
 async function actualizar(id, {nombre, correo, rol}) {
-    const cambios=Objeto.entries({nombre, correo, rol}).filter(([, valor])=> valor !== undefined);
-    if(cambios.lenght ===0)return ontenerPorId(id);
+    const cambios=Object.entries({nombre, correo, rol}).filter(([, valor])=> valor !== undefined);
+    if(cambios.length ===0)return obtenerPorId(id);
 
     const columnas = cambios.map(([columna])=>`${columna} = ?`).join(', ');
 
@@ -38,8 +38,8 @@ async function actualizar(id, {nombre, correo, rol}) {
 }
 
 //eliminar
-async function obtenerPorId() {
-    const [filas]= await pool.query(
+async function eliminar(id) {
+    const [info]= await pool.query(
         `DELETE FROM usuarios WHERE id= ?`, [id]);
         return info.affectedRows >0;
 }

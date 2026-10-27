@@ -8,6 +8,13 @@ function validarCorreo(correo){
     return correoV.test(correo);
 }
 
+function validarNombres(){
+    if(typeof nombre !== 'string') return false;
+    if(nombre.length > 50) return false;
+    const nombreValidaciones = /^[a-zA-Z]+$/;
+    return nombre.test(nombre);
+}
+
 function validarBoleta(boleta){
     return /^\d{10}$/.test(String(boleta));
 }

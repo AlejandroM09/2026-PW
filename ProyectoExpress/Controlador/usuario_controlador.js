@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const usuarioModel= require('../Modelo/usuarios_modelo');
 
-const {validarCorreo, validarBoleta, validarContraseña}=require('../validaciones');
+const {validarCorreo, validarBoleta, validarContraseña, validarNombres}=require('../validaciones');
 
 function esDuplicado(error){
     return error.code === 'ER_DUP_ENTRY' || error.code === '23505';
@@ -33,6 +33,9 @@ async function crearUsuario(req, res) {
         if (!validarContraseña(contrasena)) {
             return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
         }
+        if (!validarNombres(nombre)){
+            return res.status(400).json({ error: 'El nombre no cumple con lo requerido'});
+        }
 
         const contrasenaHash = await bcrypt.hash(contrasena, 10);
         const usuario = await usuarioModel.crear({ nombre, correo, contrasenaHash, boleta: String(boleta) });
@@ -49,7 +52,7 @@ async function actualizarUsuario(req, res) {
     try {
         const { nombre, correo, rol } = req.body || {};
 
-        if (nombre === undefined && correo === undefined && rol === undefined) {
+        if (nombre === undefined && correo === undefined && rol === undefined && !validarNombres(nombre)) {
             return res.status(400).json({ error: 'Envía al menos uno de: nombre, correo, rol' });
         }
         if (correo !== undefined && !validarCorreo(correo)) {

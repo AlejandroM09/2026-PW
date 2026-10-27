@@ -8,11 +8,11 @@ function validarCorreo(correo){
     return correoV.test(correo);
 }
 
-function validarNombres(){
-    if(typeof nombre !== 'string') return false;
-    if(nombre.length > 50) return false;
-    const nombreValidaciones = /^[a-zA-Z]+$/;
-    return nombre.test(nombre);
+function validarNombres(nombre) {
+    if (typeof nombre !== 'string') return false;
+    const limpio = nombre.trim();
+    if (limpio.length < 2 || limpio.length > 50) return false;
+    return /^\p{L}+(?:[ '’-]\p{L}+)*$/u.test(limpio);
 }
 
 function validarBoleta(boleta){
@@ -24,4 +24,4 @@ function validarContraseña(contrasena){
     return contrasena.length >=8;
 }
 
-module.exports={validarCorreo,validarBoleta,validarContraseña}
+module.exports={validarCorreo,validarNombres,validarBoleta,validarContraseña}

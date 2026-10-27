@@ -24,17 +24,17 @@ async function crearUsuario(req, res) {
         if (!nombre || !correo || !contrasena || !boleta) {
             return res.status(400).json({ error: 'nombre, correo, contrasena y boleta son obligatorios' });
         }
+        if (!validarNombres(nombre)) {
+        return res.status(400).json({ error: 'El nombre solo puede contener letras y espacios' });
+        }
         if (!validarCorreo(correo)) {
-            return res.status(400).json({ error: 'El correo no tiene un formato válido' });
+        return res.status(400).json({ error: 'El correo no tiene un formato válido' });
         }
         if (!validarBoleta(boleta)) {
-            return res.status(400).json({ error: 'La boleta debe tener 10 dígitos' });
+        return res.status(400).json({ error: 'La boleta debe tener 10 dígitos' });
         }
         if (!validarContraseña(contrasena)) {
-            return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
-        }
-        if (!validarNombres(nombre)){
-            return res.status(400).json({ error: 'El nombre no cumple con lo requerido'});
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
         }
 
         const contrasenaHash = await bcrypt.hash(contrasena, 10);
@@ -52,11 +52,14 @@ async function actualizarUsuario(req, res) {
     try {
         const { nombre, correo, rol } = req.body || {};
 
-        if (nombre === undefined && correo === undefined && rol === undefined && !validarNombres(nombre)) {
-            return res.status(400).json({ error: 'Envía al menos uno de: nombre, correo, rol' });
+        if (nombre === undefined && correo === undefined && rol === undefined) {
+        return res.status(400).json({ error: 'Envía al menos uno de: nombre, correo, rol' });
         }
         if (correo !== undefined && !validarCorreo(correo)) {
             return res.status(400).json({ error: 'El correo no tiene un formato válido' });
+        }
+        if (nombre !== undefined && !validarNombres(nombre)) {
+            return res.status(400).json({ error: 'El nombre solo puede contener letras y espacios' });
         }
 
         const usuario = await usuarioModel.actualizar(req.params.id, { nombre, correo, rol });
